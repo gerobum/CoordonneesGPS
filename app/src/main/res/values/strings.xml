@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Coordonnees GPS</string>
+    <string name="where_am_i">Where am I</string>
 </resources>
