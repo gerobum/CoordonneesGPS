@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Coordonnées GPS", "Vitesse : " + (location.hasSpeed()?"OUI -> ":"NON <- ") + location.getSpeed());
                 Log.v("Coordonnées GPS", "Latitude : " + location.getLatitude());
                 Log.v("Coordonnées GPS", "Longitude : " + location.getLongitude());
+                Log.v("Coordonnées GPS", "Provider : " + location.getProvider());
+                Log.v("Coordonnées GPS", "Time : " + DateFormat.getTimeInstance().format(new Date(location.getTime())) );
             } catch (SecurityException se) {
 
             }
