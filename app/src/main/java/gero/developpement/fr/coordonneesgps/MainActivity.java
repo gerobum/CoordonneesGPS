@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
                     double alt = location.getAltitude();
                     altitude.setText(alt + " " + getString(R.string.metre) + (alt>0?"s":""));
                     double vit = location.getSpeed();
-                    vitesse.setText(vit + " " + getString(R.string.Speed) + (alt>0?"s":""));
+                    Log.v("Coordonnées GPS", "Vitesse calculée : " + vit + " " + getString(R.string.speed));
+                    vitesse.setText(vit + " " + getString(R.string.speed));
                     latitude.setText(location.getLatitude()+"");
                     longitude.setText(location.getLongitude()+"");
                 } catch (SecurityException se) {

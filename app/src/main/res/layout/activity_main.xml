@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/Speed"
+        android:text="@string/speed"
         android:id="@+id/text_vitesse"
         android:layout_below="@+id/text_altitude" />
 

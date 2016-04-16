@@ -4,5 +4,7 @@
     <string name="where_am_i">Where am I ?</string>
     <string name="altitude">altitude</string>
     <string name="metre">meter</string>
-    <string name="Speed">Speed</string>
+    <string name="speed">km/h</string>
+    <string name="Latitude">Latitude</string>
+    <string name="Longitude">Longitude</string>
 </resources>
