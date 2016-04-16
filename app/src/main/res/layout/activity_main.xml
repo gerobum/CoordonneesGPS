@@ -14,6 +14,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/ou_suis_je"
         android:text="@string/where_am_i" />
+    <Button
+        android:onClick="click"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etat"
+        android:layout_toRightOf="@id/ou_suis_je"
+        android:text="@string/etat" />
+
+    <EditText
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Message à envoyer"
+        android:layout_alignBaseline="@+id/etat"
+        android:layout_toRightOf="@id/etat" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +46,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0 metre"
         android:id="@+id/valeur_altitude"
-        android:layout_alignTop="@+id/text_altitude"
+        android:layout_alignBaseline="@+id/text_altitude"
         android:layout_toRightOf="@+id/ou_suis_je"
         android:layout_toEndOf="@+id/ou_suis_je" />
 
@@ -49,7 +64,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0 km/h"
         android:id="@+id/valeur_vitesse"
-        android:layout_alignTop="@+id/text_vitesse"
+        android:layout_alignBaseline="@+id/text_vitesse"
         android:layout_toRightOf="@+id/ou_suis_je"
         android:layout_toEndOf="@+id/ou_suis_je" />
     <TextView
@@ -63,9 +78,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="___"
+        android:text=""
         android:id="@+id/valeur_latitude"
-        android:layout_alignTop="@+id/text_latitude"
+        android:layout_alignBaseline="@+id/text_latitude"
         android:layout_toRightOf="@+id/ou_suis_je"
         android:layout_toEndOf="@+id/ou_suis_je" />
     <TextView
@@ -79,9 +94,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="____"
+        android:text=""
         android:id="@+id/valeur_longitude"
-        android:layout_alignTop="@+id/text_longitude"
+        android:layout_alignBaseline="@+id/text_longitude"
         android:layout_toRightOf="@+id/ou_suis_je"
         android:layout_toEndOf="@+id/ou_suis_je" />
 

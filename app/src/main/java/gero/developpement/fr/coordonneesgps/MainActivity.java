@@ -1,5 +1,6 @@
 package gero.developpement.fr.coordonneesgps;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private Button ouSuisJe;
@@ -16,11 +20,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView latitude;
     private TextView longitude;
     private LocationManager locationManager;
+    private final static Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         ouSuisJe = (Button) findViewById(R.id.ou_suis_je);
         altitude = (TextView) findViewById(R.id.valeur_altitude);
@@ -49,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.v("Coordonnées GPS", "onResume");
         /*Criteria c = new Criteria();
         c.setAccuracy(Criteria.ACCURACY_FINE);
         c.setAltitudeRequired(true);
@@ -57,5 +64,54 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("Coordonnées GPS", "The best : " + locationManager.getBestProvider(c, true));
 */
+    }
+
+    @Override
+    protected void onStop() {
+        Log.v("Coordonnées GPS", "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.v("Coordonnées GPS", "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v("Coordonnées GPS", "onRestart");
+    }
+
+    public void click(View view) {
+        Log.v("Coordonnées GPS", "CLIC");
+        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        EditText message = (EditText) findViewById(R.id.message);
+        intent.putExtra("Message", message.getText().toString());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString("Altitude", altitude.getText().toString());
+        savedInstanceState.putString("Vitesse", vitesse.getText().toString());
+        savedInstanceState.putString("Latitude", latitude.getText().toString());
+        savedInstanceState.putString("Longitude", longitude.getText().toString());
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        altitude.setText(savedInstanceState.getString("Altitude"));
+        vitesse.setText(savedInstanceState.getString("Vitesse"));
+        latitude.setText(savedInstanceState.getString("Latitude"));
+        longitude.setText(savedInstanceState.getString("Longitude"));
     }
 }
