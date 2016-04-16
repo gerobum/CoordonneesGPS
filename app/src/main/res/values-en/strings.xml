@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">GPS Position</string>
     <string name="where_am_i">Where am I ?</string>
+    <string name="altitude">altitude</string>
+    <string name="metre">meter</string>
+    <string name="Speed">Speed</string>
 </resources>

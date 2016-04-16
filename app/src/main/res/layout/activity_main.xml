@@ -12,5 +12,79 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/ou_suis_je"
         android:text="@string/where_am_i" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/altitude"
+        android:id="@+id/text_altitude"
+        android:layout_below="@+id/ou_suis_je"
+        android:layout_alignLeft="@+id/ou_suis_je"
+        android:layout_marginTop="22dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0 metre"
+        android:id="@+id/valeur_altitude"
+        android:layout_alignTop="@+id/text_altitude"
+        android:layout_toRightOf="@+id/ou_suis_je"
+        android:layout_toEndOf="@+id/ou_suis_je" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Speed"
+        android:id="@+id/text_vitesse"
+        android:layout_below="@+id/text_altitude" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0 km/h"
+        android:id="@+id/valeur_vitesse"
+        android:layout_alignTop="@+id/text_vitesse"
+        android:layout_toRightOf="@+id/ou_suis_je"
+        android:layout_toEndOf="@+id/ou_suis_je" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Latitude"
+        android:id="@+id/text_latitude"
+        android:layout_below="@+id/text_vitesse" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="___"
+        android:id="@+id/valeur_latitude"
+        android:layout_alignTop="@+id/text_latitude"
+        android:layout_toRightOf="@+id/ou_suis_je"
+        android:layout_toEndOf="@+id/ou_suis_je" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Longitude"
+        android:id="@+id/text_longitude"
+        android:layout_below="@+id/text_latitude" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="____"
+        android:id="@+id/valeur_longitude"
+        android:layout_alignTop="@+id/text_longitude"
+        android:layout_toRightOf="@+id/ou_suis_je"
+        android:layout_toEndOf="@+id/ou_suis_je" />
+
+
+
 </RelativeLayout>

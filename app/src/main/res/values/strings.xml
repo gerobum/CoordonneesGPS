@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Coordonnees GPS</string>
     <string name="where_am_i">Where am I</string>
+    <string name="altitude">Altitude</string>
+    <string name="metre">metre</string>
+    <string name="Speed">Vitesse</string>
+    <string name="Latitude">Latitude</string>
+    <string name="Longitude">Longitude</string>
 </resources>
