@@ -1,7 +1,9 @@
 package gero.developpement.fr.coordonneesgps;
 
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.util.Date;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView vitesse;
     private TextView latitude;
     private TextView longitude;
+    private TextView heure;
     private LocationManager locationManager;
+    private LocationListener locationListener;
     private final static Random random = new Random();
 
     @Override
@@ -28,24 +35,51 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.v("Coordonnées GPS", "Location Changed " + location);
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+                Log.v("Coordonnées GPS", "Location Changed ");
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+                Log.v("Coordonnées GPS", "Location Changed " + s);
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                Log.v("Coordonnées GPS", "Location Changed " + s);
+            }
+        };
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         ouSuisJe = (Button) findViewById(R.id.ou_suis_je);
         altitude = (TextView) findViewById(R.id.valeur_altitude);
         vitesse = (TextView) findViewById(R.id.valeur_vitesse);
         latitude = (TextView) findViewById(R.id.valeur_latitude);
         longitude = (TextView) findViewById(R.id.valeur_longitude);
+        heure = (TextView) findViewById(R.id.valeur_heure);
         ouSuisJe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
+                    locationManager.requestSingleUpdate("gps",
+                            locationListener, null);
                     Location location = locationManager.getLastKnownLocation("gps");
-                    double alt = location.getAltitude();
-                    altitude.setText(alt + " " + getString(R.string.metre) + (alt>0?"s":""));
-                    double vit = location.getSpeed();
-                    Log.v("Coordonnées GPS", "Vitesse calculée : " + vit + " " + getString(R.string.speed));
+                    String alt = String.format("%.2f", location.getAltitude()) ;
+                    boolean isalt = (location.getAltitude() > 0);
+                    altitude.setText(alt + " " + getString(R.string.metre) + (isalt?"s":""));
+                    String vit = String.format("%.2f", location.getSpeed());
                     vitesse.setText(vit + " " + getString(R.string.speed));
                     latitude.setText(location.getLatitude()+"");
                     longitude.setText(location.getLongitude()+"");
+                    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+                    heure.setText(df.format(new Date(location.getTime())));
                 } catch (SecurityException se) {
                     Log.v("Coordonnées GPS", se.toString());
                 }
@@ -99,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putString("Vitesse", vitesse.getText().toString());
         savedInstanceState.putString("Latitude", latitude.getText().toString());
         savedInstanceState.putString("Longitude", longitude.getText().toString());
+        savedInstanceState.putString("Heure", heure.getText().toString());
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -113,5 +148,6 @@ public class MainActivity extends AppCompatActivity {
         vitesse.setText(savedInstanceState.getString("Vitesse"));
         latitude.setText(savedInstanceState.getString("Latitude"));
         longitude.setText(savedInstanceState.getString("Longitude"));
+        heure.setText(savedInstanceState.getString("Heure"));
     }
 }
