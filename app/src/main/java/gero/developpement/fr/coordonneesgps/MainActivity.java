@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView heure;
     private LocationManager locationManager;
     private LocationListener locationListener;
+
     private final static Random random = new Random();
 
     @Override
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
                     altitude.setText(alt + " " + getString(R.string.metre) + (isalt?"s":""));
                     String vit = String.format("%.2f", location.getSpeed());
                     vitesse.setText(vit + " " + getString(R.string.speed));
-                    latitude.setText(location.getLatitude()+"");
-                    longitude.setText(location.getLongitude()+"");
+                    latitude.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
+                    longitude.setText(Location.convert(location.getLongitude(), Location.FORMAT_SECONDS));
                     DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
                     heure.setText(df.format(new Date(location.getTime())));
                 } catch (SecurityException se) {
