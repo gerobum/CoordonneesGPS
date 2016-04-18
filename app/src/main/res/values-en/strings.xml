@@ -12,4 +12,5 @@
     <string name="nul_altitude">0 meter</string>
     <string name="nul_speed">0 km/h</string>
     <string name="kmh">km/h</string>
+    <string name="decimales">Decimals</string>
 </resources>
