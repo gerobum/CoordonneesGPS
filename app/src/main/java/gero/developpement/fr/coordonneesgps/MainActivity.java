@@ -1,6 +1,7 @@
 package gero.developpement.fr.coordonneesgps;
 
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -67,17 +68,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    locationManager.requestSingleUpdate("gps", locationListener, null);
-                    Location location = locationManager.getLastKnownLocation("gps");
-                    String alt = String.format("%.2f", location.getAltitude()) ;
-                    boolean isalt = (location.getAltitude() > 0);
-                    altitude.setText(alt + " " + getString(R.string.metre) + (isalt?"s":""));
-                    String vit = String.format("%.2f", location.getSpeed());
-                    vitesse.setText(vit + " " + getString(R.string.speed));
-                    latitude.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
-                    longitude.setText(Location.convert(location.getLongitude(), Location.FORMAT_SECONDS));
-                    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-                    heure.setText(df.format(new Date(location.getTime())));
+                    Criteria c = new Criteria();
+                    c.setAccuracy(Criteria.ACCURACY_FINE);
+                    String provider = locationManager.getBestProvider(c, true);
+                    if (provider != null) {
+                        locationManager.requestSingleUpdate(provider, locationListener, null);
+                        Location location = locationManager.getLastKnownLocation("gps");
+                        String alt = String.format("%.2f", location.getAltitude());
+                        boolean isalt = (location.getAltitude() > 0);
+                        altitude.setText(alt + " " + getString(R.string.metre) + (isalt ? "s" : ""));
+                        String vit = String.format("%.2f", location.getSpeed());
+                        vitesse.setText(vit + " " + getString(R.string.speed));
+                        latitude.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
+                        longitude.setText(Location.convert(location.getLongitude(), Location.FORMAT_SECONDS));
+                        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+                        heure.setText(df.format(new Date(location.getTime())));
+                    }
                 } catch (SecurityException se) {
                     Log.v("Coordonnées GPS", se.toString());
                 }
