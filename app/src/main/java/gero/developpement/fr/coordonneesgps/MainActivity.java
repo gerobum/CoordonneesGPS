@@ -1,11 +1,14 @@
 package gero.developpement.fr.coordonneesgps;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -41,11 +44,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 Log.v("Coordonnées GPS", "Location Changed " + location);
+                update(location);
             }
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
-                Log.v("Coordonnées GPS", "Location Changed ");
+                Log.v("Coordonnées GPS", "Location Changed " + s);
             }
 
             @Override
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Coordonnées GPS", "Location Changed " + s);
             }
         };
+
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         ouSuisJe = (Button) findViewById(R.id.ou_suis_je);
@@ -77,32 +82,35 @@ public class MainActivity extends AppCompatActivity {
                     c.setAccuracy(Criteria.ACCURACY_FINE);
                     String provider = locationManager.getBestProvider(c, true);
                     if (provider != null) {
-                        //locationManager.requestSingleUpdate();
                         locationManager.requestSingleUpdate(provider, locationListener, null);
                         Location location = locationManager.getLastKnownLocation(provider);
-                        String alt = String.format("%.2f", location.getAltitude());
-                        boolean isalt = (location.getAltitude() > 0);
-                        altitude.setText(alt + " " + getString(R.string.metre) + (isalt ? "s" : ""));
-                        String vit = String.format("%.2f", location.getSpeed());
-                        vitesse.setText(vit + " " + getString(R.string.speed));
-                        int format;
-                        if (decimale.isChecked()) {
-                            format = Location.FORMAT_DEGREES;
-                        } else if (minutes.isChecked()) {
-                            format = Location.FORMAT_MINUTES;
-                        } else {
-                            format = Location.FORMAT_SECONDS;
-                        }
-                        latitude.setText(Location.convert(location.getLatitude(), format));
-                        longitude.setText(Location.convert(location.getLongitude(), format));
-                        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-                        heure.setText(df.format(new Date(location.getTime())));
+                        update(location);
                     }
                 } catch (SecurityException se) {
                     Log.v("Coordonnées GPS", se.toString());
                 }
             }
         });
+        Criteria c = new Criteria();
+        c.setAccuracy(Criteria.ACCURACY_FINE);
+        String provider = locationManager.getBestProvider(c, true);
+        if (provider != null)
+            if (!(ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                locationManager.requestLocationUpdates(provider, 10000, 20, locationListener);
+            }
+
+
     }
 
     @Override
@@ -167,5 +175,25 @@ public class MainActivity extends AppCompatActivity {
         latitude.setText(savedInstanceState.getString("Latitude"));
         longitude.setText(savedInstanceState.getString("Longitude"));
         heure.setText(savedInstanceState.getString("Heure"));
+    }
+
+    private void update(Location location) {
+        String alt = String.format("%.2f", location.getAltitude());
+        boolean isalt = (location.getAltitude() > 0);
+        altitude.setText(alt + " " + getString(R.string.metre) + (isalt ? "s" : ""));
+        String vit = String.format("%.2f", location.getSpeed());
+        vitesse.setText(vit + " " + getString(R.string.speed));
+        int format;
+        if (decimale.isChecked()) {
+            format = Location.FORMAT_DEGREES;
+        } else if (minutes.isChecked()) {
+            format = Location.FORMAT_MINUTES;
+        } else {
+            format = Location.FORMAT_SECONDS;
+        }
+        latitude.setText(Location.convert(location.getLatitude(), format));
+        longitude.setText(Location.convert(location.getLongitude(), format));
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        heure.setText(df.format(new Date(location.getTime())));
     }
 }
