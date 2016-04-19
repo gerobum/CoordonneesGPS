@@ -120,15 +120,6 @@
         android:layout_toRightOf="@+id/ou_suis_je"
         android:layout_toEndOf="@+id/ou_suis_je" />
 
-    <!--<Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Degré"
-        android:id="@+id/degreOuDecimale"
-        android:layout_below="@+id/text_longitude"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />-->
-
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -140,20 +131,20 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/decimales"
+            android:text="@string/Degres"
             android:id="@+id/radioButtonDecimale"
             android:checked="true" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Degrés et minutes"
+            android:text="@string/Minutes"
             android:id="@+id/radioButtonDM"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="°, &apos; et &apos;&apos;"
+            android:text="@string/Secondes"
             android:id="@+id/radioButtonDMS"/>
     </RadioGroup>
 

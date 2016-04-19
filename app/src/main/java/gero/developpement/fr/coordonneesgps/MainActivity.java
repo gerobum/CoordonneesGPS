@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isalt = (location.getAltitude() > 0);
         altitude.setText(alt + " " + getString(R.string.metre) + (isalt ? "s" : ""));
         String vit = String.format("%.2f", location.getSpeed());
-        vitesse.setText(vit + " " + getString(R.string.speed));
+        vitesse.setText(vit + " " + getString(R.string.kmh));
         int format;
         if (decimale.isChecked()) {
             format = Location.FORMAT_DEGREES;

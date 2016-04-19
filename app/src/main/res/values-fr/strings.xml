@@ -12,5 +12,7 @@
     <string name="nul_speed">0 km/h</string>
     <string name="Time">Heure</string>
     <string name="kmh">km/h</string>
-    <string name="decimales">Décimales</string>
+    <string name="Degres">Degrés</string>
+    <string name="Minutes">Minutes</string>
+    <string name="Secondes">Secondes</string>
 </resources>
