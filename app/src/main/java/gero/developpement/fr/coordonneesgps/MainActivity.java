@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView heure;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private RadioButton decimale, minutes, secondes;
 
     private final static Random random = new Random();
 
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
         latitude = (TextView) findViewById(R.id.valeur_latitude);
         longitude = (TextView) findViewById(R.id.valeur_longitude);
         heure = (TextView) findViewById(R.id.valeur_heure);
+        decimale = (RadioButton) findViewById(R.id.radioButtonDecimale);
+        minutes = (RadioButton) findViewById(R.id.radioButtonDM);
+        secondes = (RadioButton) findViewById(R.id.radioButtonDMS);
         ouSuisJe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,15 +77,24 @@ public class MainActivity extends AppCompatActivity {
                     c.setAccuracy(Criteria.ACCURACY_FINE);
                     String provider = locationManager.getBestProvider(c, true);
                     if (provider != null) {
+                        //locationManager.requestSingleUpdate();
                         locationManager.requestSingleUpdate(provider, locationListener, null);
-                        Location location = locationManager.getLastKnownLocation("gps");
+                        Location location = locationManager.getLastKnownLocation(provider);
                         String alt = String.format("%.2f", location.getAltitude());
                         boolean isalt = (location.getAltitude() > 0);
                         altitude.setText(alt + " " + getString(R.string.metre) + (isalt ? "s" : ""));
                         String vit = String.format("%.2f", location.getSpeed());
                         vitesse.setText(vit + " " + getString(R.string.speed));
-                        latitude.setText(Location.convert(location.getLatitude(), Location.FORMAT_SECONDS));
-                        longitude.setText(Location.convert(location.getLongitude(), Location.FORMAT_SECONDS));
+                        int format;
+                        if (decimale.isChecked()) {
+                            format = Location.FORMAT_DEGREES;
+                        } else if (minutes.isChecked()) {
+                            format = Location.FORMAT_MINUTES;
+                        } else {
+                            format = Location.FORMAT_SECONDS;
+                        }
+                        latitude.setText(Location.convert(location.getLatitude(), format));
+                        longitude.setText(Location.convert(location.getLongitude(), format));
                         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
                         heure.setText(df.format(new Date(location.getTime())));
                     }
