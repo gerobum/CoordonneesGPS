@@ -1,12 +1,11 @@
 package gero.developpement.fr.coordonneesgps;
 
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.DateFormat;
-import java.text.Format;
 import java.util.Date;
 import java.util.Random;
 
@@ -69,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    locationManager.requestSingleUpdate("gps",
-                            locationListener, null);
+                    locationManager.requestSingleUpdate("gps", locationListener, null);
                     Location location = locationManager.getLastKnownLocation("gps");
                     String alt = String.format("%.2f", location.getAltitude()) ;
                     boolean isalt = (location.getAltitude() > 0);
