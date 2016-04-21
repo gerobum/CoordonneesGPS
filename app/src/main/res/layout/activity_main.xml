@@ -121,8 +121,9 @@
         android:layout_toEndOf="@+id/ou_suis_je" />
 
     <RadioGroup
+        android:id="@+id/groupe_choix_affichage_coordonnees"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/text_longitude"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -148,5 +149,22 @@
             android:id="@+id/radioButtonDMS"/>
     </RadioGroup>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/Precision"
+        android:id="@+id/text_precision"
+        android:layout_below="@+id/groupe_choix_affichage_coordonnees" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/valeur_precision"
+        android:layout_alignBaseline="@+id/text_precision"
+        android:layout_toRightOf="@+id/ou_suis_je"
+        android:layout_toEndOf="@+id/ou_suis_je" />
 
 </RelativeLayout>

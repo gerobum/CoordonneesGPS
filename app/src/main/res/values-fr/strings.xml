@@ -15,4 +15,5 @@
     <string name="Degres">Degrés</string>
     <string name="Minutes">Minutes</string>
     <string name="Secondes">Secondes</string>
+    <string name="Precision">Précision</string>
 </resources>
