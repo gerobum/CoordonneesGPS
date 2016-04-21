@@ -3,11 +3,10 @@ package gero.developpement.fr.coordonneesgps;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,20 +16,26 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
     private Button ouSuisJe;
     private TextView altitude;
     private TextView vitesse;
     private TextView latitude;
     private TextView longitude;
     private TextView heure;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
+    private Location location;
     private RadioButton decimale, minutes, secondes;
+    private GoogleApiClient gApiClient;
 
     private final static Random random = new Random();
 
@@ -40,31 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Log.v("Coordonnées GPS", "Location Changed " + location);
-                update(location);
-            }
+        if (gApiClient == null) {
+            gApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-                Log.v("Coordonnées GPS", "Location Changed " + s);
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-                Log.v("Coordonnées GPS", "Location Changed " + s);
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-                Log.v("Coordonnées GPS", "Location Changed " + s);
-            }
-        };
-
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         ouSuisJe = (Button) findViewById(R.id.ou_suis_je);
         altitude = (TextView) findViewById(R.id.valeur_altitude);
         vitesse = (TextView) findViewById(R.id.valeur_vitesse);
@@ -77,38 +65,19 @@ public class MainActivity extends AppCompatActivity {
         ouSuisJe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Criteria c = new Criteria();
-                    c.setAccuracy(Criteria.ACCURACY_FINE);
-                    String provider = locationManager.getBestProvider(c, true);
-                    if (provider != null) {
-                        locationManager.requestSingleUpdate(provider, locationListener, null);
-                        Location location = locationManager.getLastKnownLocation(provider);
-                        update(location);
-                    }
-                } catch (SecurityException se) {
-                    Log.v("Coordonnées GPS", se.toString());
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
                 }
+                update(LocationServices.FusedLocationApi.getLastLocation(gApiClient));
             }
         });
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_FINE);
-        String provider = locationManager.getBestProvider(c, true);
-        if (provider != null)
-            if (!(ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                locationManager.requestLocationUpdates(provider, 10000, 20, locationListener);
-            }
 
 
     }
@@ -126,9 +95,31 @@ public class MainActivity extends AppCompatActivity {
 */
     }
 
+
+    @Override
+    protected void onStart() {
+        Log.v("Coordonnées GPS", "onStart");
+        gApiClient.connect();
+        LocationRequest lr = LocationRequest.create();
+        lr.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(gApiClient, lr, this);
+        super.onStart();
+    }
+
     @Override
     protected void onStop() {
         Log.v("Coordonnées GPS", "onStop");
+        gApiClient.disconnect();
         super.onStop();
     }
 
@@ -195,5 +186,26 @@ public class MainActivity extends AppCompatActivity {
         longitude.setText(Location.convert(location.getLongitude(), format));
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         heure.setText(df.format(new Date(location.getTime())));
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.v("Coordonnées GPS", "onConnectionFailed");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.v("Coordonnées GPS", "onConnected");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.v("Coordonnées GPS", "onConnectionSuspended");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.v("Coordonnées GPS", "onLocationChanged");
+        update(location);
     }
 }
