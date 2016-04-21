@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView latitude;
     private TextView longitude;
     private TextView heure;
+    private TextView precision;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private RadioButton decimale, minutes, secondes;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         latitude = (TextView) findViewById(R.id.valeur_latitude);
         longitude = (TextView) findViewById(R.id.valeur_longitude);
         heure = (TextView) findViewById(R.id.valeur_heure);
+        precision = (TextView) findViewById(R.id.valeur_precision);
         decimale = (RadioButton) findViewById(R.id.radioButtonDecimale);
         minutes = (RadioButton) findViewById(R.id.radioButtonDM);
         secondes = (RadioButton) findViewById(R.id.radioButtonDMS);
@@ -109,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 // for ActivityCompat#requestPermissions for more details.
                 locationManager.requestLocationUpdates(provider, 10000, 20, locationListener);
             }
-
-
     }
 
     @Override
@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putString("Latitude", latitude.getText().toString());
         savedInstanceState.putString("Longitude", longitude.getText().toString());
         savedInstanceState.putString("Heure", heure.getText().toString());
+        savedInstanceState.putString("Precision", precision.getText().toString());
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         latitude.setText(savedInstanceState.getString("Latitude"));
         longitude.setText(savedInstanceState.getString("Longitude"));
         heure.setText(savedInstanceState.getString("Heure"));
+        precision.setText(savedInstanceState.getString("Precision"));
     }
 
     private void update(Location location) {
@@ -195,5 +197,7 @@ public class MainActivity extends AppCompatActivity {
         longitude.setText(Location.convert(location.getLongitude(), format));
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         heure.setText(df.format(new Date(location.getTime())));
+        float accuracy = location.getAccuracy();
+        precision.setText(String.format("%.2f %s%s", accuracy, getString(R.string.metre), (accuracy > 0 ? "s" : "")));
     }
 }
