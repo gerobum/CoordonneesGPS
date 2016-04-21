@@ -29,9 +29,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView longitude;
     private TextView heure;
     private TextView precision;
+    private TextView vitesse_calculee;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private RadioButton decimale, minutes, secondes;
+    private Location derniereLocalisation;
 
     private final static Random random = new Random();
 
@@ -73,9 +75,11 @@ public class MainActivity extends AppCompatActivity {
         longitude = (TextView) findViewById(R.id.valeur_longitude);
         heure = (TextView) findViewById(R.id.valeur_heure);
         precision = (TextView) findViewById(R.id.valeur_precision);
+        vitesse_calculee = (TextView) findViewById(R.id.valeur_computed_speed);
         decimale = (RadioButton) findViewById(R.id.radioButtonDecimale);
         minutes = (RadioButton) findViewById(R.id.radioButtonDM);
         secondes = (RadioButton) findViewById(R.id.radioButtonDMS);
+        derniereLocalisation = null;
         ouSuisJe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
-                locationManager.requestLocationUpdates(provider, 10000, 20, locationListener);
+                locationManager.requestLocationUpdates(provider, 1000, 20, locationListener);
             }
     }
 
@@ -117,13 +121,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.v("Coordonnées GPS", "onResume");
-        /*Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_FINE);
-        c.setAltitudeRequired(true);
-        c.setCostAllowed(false);
-
-        Log.v("Coordonnées GPS", "The best : " + locationManager.getBestProvider(c, true));
-*/
     }
 
     @Override
@@ -161,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putString("Longitude", longitude.getText().toString());
         savedInstanceState.putString("Heure", heure.getText().toString());
         savedInstanceState.putString("Precision", precision.getText().toString());
+        savedInstanceState.putString("Vitesse calculée", vitesse_calculee.getText().toString());
+        savedInstanceState.putParcelable("DerniereLocalisation", derniereLocalisation);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -177,6 +176,8 @@ public class MainActivity extends AppCompatActivity {
         longitude.setText(savedInstanceState.getString("Longitude"));
         heure.setText(savedInstanceState.getString("Heure"));
         precision.setText(savedInstanceState.getString("Precision"));
+        vitesse_calculee.setText(savedInstanceState.getString("Vitesse calculée"));
+        derniereLocalisation = savedInstanceState.getParcelable("DerniereLocalisation");
     }
 
     private void update(Location location) {
@@ -199,5 +200,12 @@ public class MainActivity extends AppCompatActivity {
         heure.setText(df.format(new Date(location.getTime())));
         float accuracy = location.getAccuracy();
         precision.setText(String.format("%.2f %s%s", accuracy, getString(R.string.metre), (accuracy > 0 ? "s" : "")));
+        if (derniereLocalisation != null) {
+            float distance = location.distanceTo(derniereLocalisation);
+            long duree = location.getTime() - derniereLocalisation.getTime();
+            double vitesse = (distance / duree)*60*60; // Calcul de la vitesse en km/h
+            vitesse_calculee.setText(String.format("%.2f %s", vitesse, getString(R.string.kmh)));
+        }
+        derniereLocalisation = location;
     }
 }

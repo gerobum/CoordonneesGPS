@@ -16,4 +16,5 @@
     <string name="Minutes">Minutes</string>
     <string name="Secondes">Secondes</string>
     <string name="Precision">Précision</string>
+    <string name="ComputedSpeed">Vitesse calculée</string>
 </resources>
