@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Coordonnees GPS</string>
     <string name="where_am_i">Where am I</string>
+    <string name="etat">Etat</string>
+    <string name="altitude">Altitude</string>
+    <string name="metre">metre</string>
+    <string name="nul_altitude">0 metre</string>
+    <string name="speed">Vitesse</string>
+    <string name="kmh">km/h</string>
+    <string name="Latitude">Latitude</string>
+    <string name="Longitude">Longitude</string>
+    <string name="nul_speed">0 km/h</string>
+    <string name="Time">Time</string>
+    <string name="Degres">Degres</string>
+    <string name="Minutes">Minutes</string>
+    <string name="Secondes">Seconds</string>
+    <string name="Precision">Precision</string>
+    <string name="ComputedSpeed">Computed speed</string>
 </resources>
